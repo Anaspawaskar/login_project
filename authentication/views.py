@@ -1,8 +1,10 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.db import IntegrityError
+
 
 
 # Create your views here.
@@ -11,26 +13,29 @@ def home(request):
     return render(request, 'authentication/index.html')
 
 def signup(request):
+    try:
+        if request.method == "POST":
+            username = request.POST['username']
+            fname = request.POST['fname']
+            lname = request.POST['lname']
+            Email = request.POST['Email']
+            pass1 = request.POST['pass1']
+            pass2 = request.POST['pass2']
 
-    if request.method == "POST":
-        username = request.POST['username']
-        fname = request.POST['fname']
-        lname = request.POST['lname']
-        Email = request.POST['Email']
-        pass1 = request.POST['pass1']
-        pass2 = request.POST['pass2']
+            myuser = User.objects.create_user(username, Email, pass1)
+            myuser.first_name = fname
+            myuser.last_name = lname
 
-        myuser = User.objects.create_user(username, Email, pass1)
-        myuser.first_name = fname
-        myuser.last_name = lname
+            myuser.save()
 
-        myuser.save()
+            messages.success(request, "your account has been successfully created")
 
-        messages.success(request, "your account has been successfully created")
-
-        return HttpResponseRedirect('signin')
+            return HttpResponseRedirect('signin')
+        
+        return render(request, "authentication/signup.html")
     
-    return render(request, "authentication/signup.html")
+    except IntegrityError:
+        return HttpResponseRedirect('signup')
 
 
 
@@ -56,4 +61,4 @@ def signin(request):
     return render(request, "authentication/signin.html")
 
 def signout(request):
-    return render(request, "authentication/signout.html")
+    pass
