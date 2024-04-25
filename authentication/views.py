@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -53,7 +53,7 @@ def signin(request):
 
         else:
             messages.error("bad credentials ")
-            return HttpResponseRedirect('index')
+            return redirect('home')
 
 
 
@@ -61,4 +61,6 @@ def signin(request):
     return render(request, "authentication/signin.html")
 
 def signout(request):
-    pass
+    logout(request)
+    messages.success(request,"you have successfully logged out.")
+    return redirect('home')
