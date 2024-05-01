@@ -4,22 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'signin.css' %}">
 </head>
 <body>
+        <div class=wrapper>
+                
 
-    <h3>sign up</h3>
-    <form action="/signin" method= "POST">
-        {% csrf_token %}
+                <form action="/signin" method= "POST" class=par>
+                    <div class=h>
+                        <h3>Sign in</h3>
+                    </div>
 
-        <label for="">Username</label>
-        <input type="text" name="username" id="username" placeholder="Enter your Username" required>
-            <br>  
-        <label for="">password</label>
-        <input type="password" name="pass1" id="pass1" placeholder="Enter your password" required>
-            <br><br>
-       
-        <button type=submit>Sign in</button>
-
-    </form>
-    
-</body
+                    {% csrf_token %}
+            <div class=bt>
+                <div class=in>
+                    <label for="">Username</label>
+                    <input type="text" name="username" id="username" placeholder="Enter your Username" required>
+                </div>    <br>
+                <div class=in>  
+                    <label for="">password</label>
+                    <input type="password" name="pass1" id="pass1" placeholder="Enter your password" required>
+                </div><br><br>
+            </div>
+                <div class=btn>
+                    <button type=submit >Sign in</button>
+                </div>
+                
+                </form>
+        </div>
+</body>
