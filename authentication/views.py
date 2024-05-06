@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.db import IntegrityError
+from django.core.mail import send_mail
+
+from app1 import settings
 
 
 
@@ -13,7 +16,8 @@ def home(request):
     return render(request, 'authentication/index.html')
 
 def signup(request):
-    try:
+        
+    
         if request.method == "POST":
             username = request.POST['username']
             fname = request.POST['fname']
@@ -21,14 +25,13 @@ def signup(request):
             Email = request.POST['Email']
             pass1 = request.POST['pass1']
             pass2 = request.POST['pass2']
+
+        
             
-            if User.objects.filter(username=username):
+            if User.objects.filter(username = username):
                 messages.error(request, "please try some other username")
                 return redirect('home')
 
-            if User.objects.filter(Email=Email):
-                messages.error(request, "Email already Registered")
-                return redirect('home')
             
             if len(username)>10:
                 messages.error(request,"username must unser 10 characters")
@@ -40,6 +43,10 @@ def signup(request):
                 messages.error(request, "username must be alpha numeric")
                 return redirect('home')
             
+        
+            
+            
+            
 
             myuser = User.objects.create_user(username, Email, pass1)
             myuser.first_name = fname
@@ -47,14 +54,27 @@ def signup(request):
 
             myuser.save()
 
-            messages.success(request, "your account has been successfully created")
+            messages.success(request, "your account has been successfully created, We have sent you an confirmation Email, please confirm your email account")
 
-            return HttpResponseRedirect('signin')
+            # Welcome Email 
+
+            # Subject = "Welcome To my Django login"
+            # messages = "Hello " + myuser.first_name + "!! \n" + "Welcome to my Anas!! \n thank you for visiting our website /n we have sent you a confirmation email, please confirm your email address in order to activate your account. /n/n Thanking you /n Anas pawaskar"
+            # from_email = settings.EMAIL_HOST_USER
+            # to_list = [myuser.email]
+            # send_mail(Subject, messages, from_email, to_list, fail_silently = True)
+
+            return redirect('home')
+        
+    
         
         return render(request, "authentication/signup.html")
     
-    except IntegrityError:
-        return HttpResponseRedirect('signup')
+    
+    
+    
+    
+    
 
 
 
