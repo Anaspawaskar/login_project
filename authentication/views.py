@@ -15,7 +15,7 @@ from app1 import settings
 def home(request):
     return render(request, 'authentication/index.html')
 
-def signup(request):
+def signup(request):            #ask for the user information and have some authentication some exception
         
     
         if request.method == "POST":
@@ -43,6 +43,7 @@ def signup(request):
                 messages.error(request, "username must be alpha numeric")
                 return redirect('home')
             
+
         
             
             
@@ -78,7 +79,7 @@ def signup(request):
 
 
 
-def signin(request):
+def signin(request):            #It sings in the user who have already registered in the system
 
     if request.method == "POST":
         username = request.POST['username']
@@ -99,7 +100,7 @@ def signin(request):
 
     return render(request, "authentication/signin.html")
 
-def signout(request):
+def signout(request):           #This will sih=gn out user from the system but have the records of the user
     logout(request)
     messages.success(request,"you have successfully logged out.")
     return redirect('home')
